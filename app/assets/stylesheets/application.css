@@ -1,0 +1,31 @@
+/*
+* Fadeout element using CSS3 transitions, add class out to the element to start animation
+*/
+.fade {
+    opacity: 1;
+    -webkit-transition: opacity 0.15s linear;
+    -moz-transition: opacity 0.15s linear;
+    -o-transition: opacity 0.15s linear;
+    transition: opacity 0.15s linear;
+}
+.fade.out{
+    opacity: 0;
+}
+
+/*
+* Borderless table
+*/
+.table-borderless tbody tr td, .table-borderless tbody tr th, .table-borderless thead tr th {
+    border: none;
+}
+
+/*
+* Image alignment, block wrapping
+*/
+.vertical-align {
+    display: flex;
+    align-items: center;
+}
+.word-wrap{
+    word-wrap:break-word;
+}

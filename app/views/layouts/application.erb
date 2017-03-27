@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+	<head>
+	  <meta charset="utf-8" />
+    <title>Autolocales</title>
+    
+    <!-- INSERT FAVICON DATA FROM http://realfavicongenerator.net/ HERE-->
+    
+    <link rel="manifest" href="/manifest.json">
+    <!-- manifest.json content: "name": "App", "short_name": "App", "start_url": "/", "display": "standalone", -->
+    
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="#9fb50c">
+
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="csrf-token" content="<%= session[:csrf] %>">
+
+		<%= stylesheet_link_tag settings.app_dev_mode ? "libs/bootstrap.min":"//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css"%>
+		<%= stylesheet_link_tag "theme.min"%>
+
+		<%= stylesheet_link_tag settings.app_dev_mode ? "application":"application.min"%>
+
+		<%= javascript_include_tag settings.app_dev_mode ? "libs/react.min":"//fb.me/react-0.14.0.js"%>
+		<%= javascript_include_tag settings.app_dev_mode ? "libs/react-dom.min":"//fb.me/react-dom-0.14.0.js"%>
+    
+		<%= javascript_include_tag settings.app_dev_mode ? "libs/jquery.min":"//code.jquery.com/jquery-2.1.1.min.js"%>
+		<%= javascript_include_tag settings.app_dev_mode ? "libs/bootstrap.min":"//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"%>
+
+		<%= javascript_include_tag "application.js"%>
+
+	</head>
+<body>
+	<div class="navbar navbar-default navbar-static-top">
+	<div class="container">
+		<div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar_collapse" aria-expanded="false" aria-controls="navbar">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+			<a class="navbar-brand" href="/">Autolocales</a>
+    </div>
+    <div class="collapse navbar-collapse pull-right" id="navbar_collapse">
+      <%
+         if authenticated?
+      %>
+        <ul class="nav navbar-nav">
+          <li><a href="/sessions/logout" class="navbar-link">Logout</a></li>
+        </ul>
+      <% else %>
+        <ul class="nav navbar-nav">
+          <li><a href="/sessions/login" class="navbar-link">Login</a></li>
+        </ul>
+      <% end %>
+    </div>
+	</div>
+	</div>
+	<div class="container">
+		<%= yield %>
+	</div>
+
+  <footer class="footer">
+    <div class="container">
+      <p class="text-muted">&copy; 2017 Happy</p>
+    </div>
+  </footer>
+</body>
+</html>

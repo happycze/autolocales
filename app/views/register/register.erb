@@ -1,0 +1,118 @@
+<%= javascript_include_tag "libs/forge-sha256.min"%>
+
+<script type="application/javascript">
+  (function( lngmtcCm, $, undefined ) {
+    /*var privateVar = "Private variable";
+     lngmtcCm.publicVar = "Public variable";
+     lngmtcCm.publicMethod = function() {};
+     function privateMethod() {};*/
+    lngmtcCm.registerValidatePassword = function (){
+      if ($("#password").val().length<5 || $("#password").val().length>255){
+        $("#form_password").addClass("has-error");
+        $("#help_password").html("Heslo musí být dlouhé min. 5 a max. 255 znaků.");
+      }else{
+        $("#form_password").removeClass("has-error");
+        $("#help_password").html("");
+      }
+    }
+
+    lngmtcCm.registerValidatePasswords = function (){
+      if ($("#password").val()!=$("#password_retype").val()){
+        $("#form_password_retype").addClass("has-error");
+        $("#help_password_retype").html("Hesla se neshodují.");
+        return false
+      }else {
+        $("#form_password_retype").removeClass("has-error");
+        $("#help_password_retype").html("");
+        return true;
+      }
+    }
+
+  }( window.lngmtcCm = window.lngmtcCm || {}, jQuery ));
+
+  $(document).ready(
+    function(){
+      $("#submit_button").on("click", function( event ) {
+        return lngmtcCm.registerValidatePassword()&&lngmtcCm.registerValidatePasswords();
+      });
+
+      $("#password").on("blur",function(){
+        lngmtcCm.registerValidatePassword();
+      });
+
+      $("#password_retype").on("blur",function (){
+        lngmtcCm.registerValidatePasswords();
+      });
+
+      $("#register_form").submit(function(event){
+        $("#response").val(forge_sha256($("#email").val()+$("#password").val()));
+        $("#password").val("");
+        $("#password_retype").val("");
+      });
+    }
+  )
+</script>
+<div class="lead">Register</div>
+
+  <% form_tag "/register", :method=>:post, id: "register_form", :class=>"form-horizontal" do%>
+    <div class="form-group">
+      <div class="col-sm-offset-4 col-sm-6">
+        <%= flash_tag :error, id: 'flash-error', class: "alert alert-danger", bootstrap: true %>
+        <%= flash_tag :notice, id: 'flash-notice', class: "alert alert-success", bootstrap: true %>
+      </div>
+      <div class="col-sm-2"></div>
+    </div>
+
+    <div class="form-group <%= @name_status%>">
+      <div class="col-sm-offset-1 col-sm-3">
+        <%=label_tag "Name", class: "control-label"%>
+      </div>
+      <div class="col-sm-6">
+          <%= text_field_tag :name, class: "form-control", value: @name, placeholder: @name_placeholder, maxlenght: 255, autofocus: true %>
+      </div>
+      <div class="col-sm-2"></div>
+    </div>
+
+    <div class="form-group <%= @email_status%>">
+        <div class="col-sm-offset-1 col-sm-3">
+          <%=label_tag "Email *", class: "control-label"%>
+        </div>
+        <div class="col-sm-6">
+          <div class="input-group">
+            <span class="input-group-addon">@</span>
+            <%= email_field_tag :email, id: "email", class: "form-control", value: @email, placeholder: @email_placeholder, maxlenght: 255, required: true %>
+          </div>
+        </div>
+        <div class="col-sm-2"></div>
+      </div>
+
+      <div class="form-group <%= @password_status%>" id="form_password">
+        <div class="col-sm-offset-1 col-sm-3">
+          <%=label_tag "Password *", class: "control-label"%>
+        </div>
+        <div class="col-sm-6">
+          <%= password_field_tag :password, id: "password", class: "form-control", required: true %>
+          <%= hidden_field_tag :response, id: "response", value: ""%>
+          <span id="help_password" class="help-block"></span>
+        </div>
+        <div class="col-sm-2"></div>
+      </div>
+
+      <div class="form-group" id="form_password_retype">
+
+        <div class="col-sm-offset-1 col-sm-3">
+          <%=label_tag "Retype password *", class: "control-label"%>
+        </div>
+        <div class="col-sm-6">
+          <%= password_field_tag :password_retype, id: "password_retype", class: "form-control", required: true %>
+          <span id="help_password_retype" class="help-block"></span>
+        </div>
+        <div class="col-sm-2"></div>
+      </div>
+
+      <div class="form-group">
+        <div class="col-sm-offset-4 col-sm-6">
+          <%= submit_tag "Register", id: "submit_button", class: "btn btn-primary"%>
+        </div>
+      </div>
+<% end %>
